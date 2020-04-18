@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+  lafilmoapi:
+    build:
+      context: .
+    environment:
+      DATABASE_URL: postgres://lafilmoapi:lafilmoapi@postgres:5432/lafilmoapi
+      DATABASE_SSL: 0
+      DEBUG: 1
+      PORT: 8000
+    ports:
+      - 8000:8000
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres
+    environment:
+      POSTGRES_USER: lafilmoapi
+      POSTGRES_PASSWORD: lafilmoapi
+      POSTGRES_DB: lafilmoapi

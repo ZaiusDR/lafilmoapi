@@ -310,4 +310,7 @@ fabric.properties
 
 # Pyre type checker
 
+# Envfile
+.env
+
 # End of https://www.gitignore.io/api/python,django,intellij,pycharm

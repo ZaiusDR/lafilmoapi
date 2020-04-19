@@ -3,6 +3,8 @@ import requests
 from lxml import html
 from requests.compat import urljoin
 
+from api import models
+
 
 class WeekScrapper:
 
@@ -12,11 +14,19 @@ class WeekScrapper:
         self.week = week
         self.week_tree = self.get_week_agenda_tree()
 
+    def scrape(self):
+        for link in self.scrape_detail_links():
+            if '/film' not in link:
+                continue
+            detail_scrapper = DetailScrapper(link.split('/')[-1])
+            film_details = detail_scrapper.scrape_film_details()
+            models.Film.objects.update_or_create(**film_details)
+
     def scrape_detail_links(self):
         return self.week_tree.xpath('//div[@class="titl click_text"]/a/@href')
 
     def get_week_agenda_tree(self):
-        response = requests.get(self.FILMO_URL, params={'w': '2020-02-24'})
+        response = requests.get(self.FILMO_URL, params={'w': self.week})
         return html.fromstring(response.content)
 
 
@@ -52,6 +62,6 @@ class DetailScrapper:
         return html.fromstring(response.content)
 
 
-
 def scrape():
-    pass
+    week_scrapper = WeekScrapper('2020-02-24')
+    week_scrapper.scrape()

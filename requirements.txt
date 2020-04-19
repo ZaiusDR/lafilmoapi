@@ -4,5 +4,6 @@ dj-database-url
 gunicorn
 lxml
 markdown
+psycopg2
 requests
 whitenoise

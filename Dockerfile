@@ -6,14 +6,15 @@ ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 ENV DEBUG 0
 
-RUN apk update \
-    && apk add --virtual build-deps gcc python3-dev musl-dev \
-    && apk add postgresql-dev \
-    && pip install psycopg2 \
-    && apk del build-deps
+COPY requirements.txt .
 
-COPY ./requirements.txt .
-RUN pip install -r requirements.txt
+RUN apk update \
+    && apk add --update --no-cache --virtual build-deps \
+        gcc python3-dev musl-dev \
+        libxslt-dev g++ libxslt-dev \
+    && apk add postgresql-dev libxslt  \
+    && pip install --no-cache-dir -r requirements.txt \
+    && apk del build-deps
 
 COPY . .
 

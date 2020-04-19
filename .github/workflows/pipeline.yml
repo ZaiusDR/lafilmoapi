@@ -35,9 +35,32 @@ jobs:
       run: |
         python manage.py test
 
+  docker_smoke_tests:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/cache@v1
+      with:
+        path: ~/.cache/pip
+        key: ${{ runner.os }}-pip-${{ hashFiles('**/smoke_tests/requirements.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-
+    - uses: actions/setup-python@v1
+      with:
+        python-version: 3.8
+    - name: Install Dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip3 install -r smoke_tests/requirements.txt
+    - name: Run Tests
+      run: |
+        pytest
+
   deploy:
     runs-on: ubuntu-latest
-    needs: build
+    needs: [build, docker_smoke_tests]
 
     steps:
     - uses: actions/checkout@v2

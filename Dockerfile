@@ -11,8 +11,8 @@ COPY requirements.txt .
 RUN apk update \
     && apk add --update --no-cache --virtual build-deps \
         gcc python3-dev musl-dev \
-        libxslt-dev g++ libxslt-dev \
-    && apk add postgresql-dev libxslt  \
+        libxslt-dev g++ libxslt-dev libxslt \
+    && apk add postgresql-dev \
     && pip install --no-cache-dir -r requirements.txt \
     && apk del build-deps
 

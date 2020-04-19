@@ -2,5 +2,7 @@ django
 djangorestframework
 dj-database-url
 gunicorn
+lxml
 markdown
+requests
 whitenoise
